@@ -1,0 +1,35 @@
+# http proxy configuration
+# uses the same proxy for all of http, https, ftp
+#
+# User must maintain .proxy_host
+# Contents of this file should be host:port without protocol spec.
+#
+# User can maintain .proxy_auth  Contents of this file
+# should be username:password
+#
+# User can maintain a list of no_proxy IPs as .noproxy.txt
+
+if [[ ! -f ".proxy_host" ]]; then
+    hostport="$(cat .proxy_host)
+    auth=
+    [[ -f ".proxy_auth" ]] && auth="$(cat .proxy_auth)@"
+
+    export HTTP_PROXY="http://${auth}${hostport}"
+    export http_proxy=$HTTP_PROXY
+    export HTTPS_PROXY=$HTTP_PROXY
+    export https_proxy=$HTTP_PROXY
+    export FTP_PROXY=$HTTP_PROXY
+    export ftp_proxy=$FTP_PROXY
+
+    # use a user-configured proxy list or generate one with common DT2.0 address ranges
+    proxy_bypass=
+    proxy_local="localhost"
+    if [[ -f .noproxy.txt ]]; then
+        proxy_bypass_user=$(cat .noproxy.txt |tr -s ' ' |cut -d ' ' -f 2 |tr '\n' ',' |sed 's/,$//')
+        [[ ${#proxy_bypass_user} -ne 0 ]] && proxy_bypass="$proxy_local,$proxy_bypass_user"
+    else
+        proxy_bypass="$proxy_local"
+    fi
+    export NO_PROXY=$proxy_bypass
+    export no_proxy=$NO_PROXY
+fi

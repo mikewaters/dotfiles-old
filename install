@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# install dotfiles
+# destructive - if file exists in $home, it will be clobbered
+# run $0 backup first if this is a problem
+# notes:
+#   .bashrc will source .bashrc.local and .bashrc.`whoami`
+#   reads user input for proxy aut and proxy host
+# @mikewaters 2013
+
+usage() {
+    echo "usage: $0 [backup|shell|proxy|devel|pydist|tmux|vim]" 2>&1
+    exit 1
+}
+
+link() {
+    arrname=$1[@]
+    arr=("${!arrname}")
+
+    for src in "${arr[@]}"; do
+        pth="$(pwd)/${src}"
+        [[ -e "$pth" ]] && ln -sfv "$pth" "${home}/${src}"
+    done
+}
+
+[[ -z $1 ]] && usage
+
+home="${HOME}"
+
+shell=( .bash_aliases .bashrc )
+proxy=( .bashrc.proxy .proxy.ignores )
+devel=( .gitconfig .git-completion.bash )
+pydist=( .pydistutils.cfg .pip/pip.conf .pypirc )
+tmux=( .tmux.conf )
+vim=( .vim .vimrc .gvimrc )
+
+generated=( .bashrc.local .bashrc.$(whoami) .proxy-host .proxy-auth .gitignore )
+bak=( ${shell[@]} ${proxy[@]} ${devel[@]} ${pydist[@]} ${tmux[@]} ${vim[@]} ${generated[@]} )
+
+case "$1" in
+    backup)
+        tmpd=$(mktemp -d)
+        for src in "${bak[@]}"; do 
+            dest="${home}/${src}"
+            if [[ -e "$dest" ]]; then
+                cp -av "$dest" "${tmpd}"
+            fi
+        done
+        ;;
+    shell)
+        [[ ! -e "${home}/.bashrc.local" ]] && touch "${home}/.bashrc.local"
+        [[ ! -e "${home}/.bashrc.$(whoami)" ]] && touch "${home}/.bashrc.$(whoami)"
+        link shell
+        ;;
+    proxy)
+        link proxy
+        echo -n "proxy host:port: " && read phost
+        echo -n "proxy username: " && read puser
+        echo -n "proxy password: " && read ppasswd
+        echo "${phost}" > "${home}/.proxy-host"
+        echo "${puser}:${ppasswd}" > "${home}/.proxy-auth"
+        ;;
+    devel)
+        ln -sfv "$(pwd)/.gitignore-global" "${home}/.gitignore"
+        link devel
+        ;;
+    pydist)
+        mkdir -p "${home}/.pip"
+        link pydist
+        ;;
+    tmux)
+        link tmux
+        ;;
+    vim)
+        link vim    
+        ;;
+    *)
+        usage
+        ;;
+esac
