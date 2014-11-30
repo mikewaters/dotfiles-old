@@ -34,7 +34,3 @@
     who = shortlog -s --
     conflicts = git diff --name-only --diff-filter=U
     pullify = config --add remote.origin.fetch '+refs/pull/*/head:refs/remotes/origin/pr/*'
-[hub]
-    protocol = https
-[push]
-    default = simple

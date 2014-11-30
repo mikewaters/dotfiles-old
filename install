@@ -69,7 +69,11 @@ case "$1" in
         link devel
         cp $(pwd)/.gitconfig ${home}/.gitconfig
         git_ver=$(git --version |awk '{print $3}')
-        version_gte $git_ver "1.8" && git config --global push.default simple
+        if version_gte $git_ver "1.8"; then
+            git config --global push.default simple
+        else
+            git config --global push.default current
+        fi
         ;;
         ;;
     pydist)
