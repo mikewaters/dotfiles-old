@@ -16,7 +16,7 @@ export GREP_OPTIONS="--color=auto"
 
 [[ -f .git-completion.bash ]] && source .git-completion.bash
 [[ -f .bashrc.proxy ]] && source .bashrc.proxy
-[[ -f .bashrc.$(whoami) ]] && source .bashrc.$(whoami)
-[[ -d "${HOME}/.bash_completion.d" ]] && for f in "${HOME}/.bash_completion.d/*"; do source $f; done
+[[ -f .bashrc.local ]] && source .bashrc.local
+[[ -d .bash_completion.d ]] && for f in ".bash_completion.d/*"; do source $f; done
 
 export PATH="${HOME}/bin:$PATH"

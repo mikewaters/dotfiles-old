@@ -7,10 +7,15 @@
 #   .bashrc will source .bashrc.local and .bashrc.`whoami`
 #   reads user input for proxy aut and proxy host
 # @mikewaters 2013
+# todo - differentiate between copy and link.  rewrite in higher level lang?
 
 usage() {
     echo "usage: $0 [backup|shell|proxy|devel|pydist|tmux|vim]" 2>&1
     exit 1
+}
+
+version_gte() {
+    [[  "$1" = "`echo -e '$1\n$2' | sort -V | tail -n1`" ]]
 }
 
 link() {
@@ -29,7 +34,7 @@ home="${HOME}"
 
 shell=( .bash_aliases .bashrc )
 proxy=( .bashrc.proxy .proxy.ignores )
-devel=( .gitconfig .git-completion.bash )
+devel=( .git-completion.bash )
 pydist=( .pydistutils.cfg .pip/pip.conf .pypirc )
 tmux=( .tmux.conf )
 vim=( .vim .vimrc .gvimrc )
@@ -48,9 +53,8 @@ case "$1" in
         done
         ;;
     shell)
-        [[ ! -e "${home}/.bashrc.local" ]] && touch "${home}/.bashrc.local"
-        [[ ! -e "${home}/.bashrc.$(whoami)" ]] && touch "${home}/.bashrc.$(whoami)"
         link shell
+        echo "copy any .local file over yourself"
         ;;
     proxy)
         link proxy
@@ -63,6 +67,10 @@ case "$1" in
     devel)
         ln -sfv "$(pwd)/.gitignore-global" "${home}/.gitignore"
         link devel
+        cp $(pwd)/.gitconfig ${home}/.gitconfig
+        git_ver=$(git --version |awk '{print $3}')
+        version_gte $git_ver "1.8" && git config --global push.default simple
+        ;;
         ;;
     pydist)
         mkdir -p "${home}/.pip"

@@ -35,13 +35,14 @@ set smarttab
 
 set visualbell
 
-set undofile
-set undodir=~/.vim/undodir
+if has('persistent_undo')
+    set undofile
+    set undodir=~/.vim/undodir
+endif
 
 syntax enable
 
 filetype plugin indent on
-
 
 " bash-like filename completion
 set wildmode=longest,list,full
@@ -61,8 +62,6 @@ set backspace=indent,eol,start
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 
-
-
 " start nerdtree if vim is opened with no files specified
 " autocmd StdinReadPre * let s:std_in=1
 " autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
@@ -70,8 +69,10 @@ set backspace=indent,eol,start
 " remap <leader>nn to NERDTree, opening in the cwd for whatever file is open
 
 " don't set cwd to open file's dir
-set noautochdir
-let NERDTreeChDirMode=0
+if version >= 703
+    set noautochdir
+    let NERDTreeChDirMode=0
+endif
 
 " show bookmarks automatically
 let NERDTreeShowBookmarks=1

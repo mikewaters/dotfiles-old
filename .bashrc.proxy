@@ -9,8 +9,8 @@
 #
 # User can maintain a list of no_proxy IPs as .noproxy.txt
 
-if [[ ! -f ".proxy_host" ]]; then
-    hostport="$(cat .proxy_host)
+if [[ -f ".proxy_host" ]]; then
+    hostport="$(cat .proxy_host)"
     auth=
     [[ -f ".proxy_auth" ]] && auth="$(cat .proxy_auth)@"
 
