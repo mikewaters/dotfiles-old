@@ -16,3 +16,12 @@
 [submodule ".vim/bundle/vim-obsession"]
     path = .vim/bundle/vim-obsession
     url = git://github.com/tpope/vim-obsession.git
+[submodule ".vim/bundle/fugitive"]
+	path = .vim/bundle/fugitive
+	url = http://github.com/tpope/vim-fugitive.git
+[submodule ".vim/bundle/python-mode"]
+	path = .vim/bundle/python-mode
+	url = git://github.com/klen/python-mode.git
+[submodule ".vim/bundle/vim-scratch"]
+	path = .vim/bundle/vim-scratch
+	url = https://github.com/duff/vim-scratch.git
