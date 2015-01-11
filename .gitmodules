@@ -1,27 +1,36 @@
 [submodule ".vim/bundle/colorschemes"]
     path = .vim/bundle/colorschemes
     url = https://github.com/flazz/vim-colorschemes.git    
+    ignore = untracked
 [submodule ".vim/bundle/jedi-vim"]
     path = .vim/bundle/jedi-vim
     url = https://github.com/davidhalter/jedi-vim.git
+    ignore = untracked
 [submodule ".vim/bundle/nerdtree"]
     path = .vim/bundle/nerdtree
     url = https://github.com/scrooloose/nerdtree.git
+    ignore = untracked
 [submodule ".vim/bundle/supertab"]
     path = .vim/bundle/supertab
     url = https://github.com/ervandew/supertab.git
+    ignore = untracked
 [submodule ".vim/bundle/vim-airline"]
     path = .vim/bundle/vim-airline
     url = https://github.com/bling/vim-airline
+    ignore = untracked
 [submodule ".vim/bundle/vim-obsession"]
     path = .vim/bundle/vim-obsession
     url = git://github.com/tpope/vim-obsession.git
+    ignore = untracked
 [submodule ".vim/bundle/fugitive"]
 	path = .vim/bundle/fugitive
 	url = http://github.com/tpope/vim-fugitive.git
+    ignore = untracked
 [submodule ".vim/bundle/python-mode"]
 	path = .vim/bundle/python-mode
 	url = git://github.com/klen/python-mode.git
+    ignore = untracked
 [submodule ".vim/bundle/vim-scratch"]
 	path = .vim/bundle/vim-scratch
 	url = https://github.com/duff/vim-scratch.git
+    ignore = untracked

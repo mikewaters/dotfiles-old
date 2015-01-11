@@ -8,6 +8,8 @@
 " TODO:
 " - document this file
 " - move gvim-specific diretove to .gvimrc
+let g:pathogen_disabled = []
+call add(g:pathogen_disabled, 'jedi-vim')
 
 execute pathogen#infect()
 execute pathogen#helptags()
@@ -24,7 +26,7 @@ set laststatus=2
 set t_Co=256
 
 " highlight >100 chars red
-match ErrorMsg '\%>101v.\+'
+" match ErrorMsg '\%>101v.\+'
 
 set tabstop=4
 set shiftwidth=4
@@ -35,6 +37,63 @@ set smarttab
 
 set visualbell
 
+
+" Add the virtualenv's site-packages to vim path
+if has('python')
+py << EOF
+import os.path
+import sys
+import vim
+if 'VIRTUAL_ENV' in os.environ:
+    project_base_dir = os.environ['VIRTUAL_ENV']
+    sys.path.insert(0, project_base_dir)
+    activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+    execfile(activate_this, dict(__file__=activate_this))
+EOF
+endif
+
+" Python-mode
+" Activate rope
+" Keys:
+" K             Show python docs
+" <Ctrl-Space>  Rope autocomplete
+" <Ctrl-c>g     Rope goto definition
+" <Ctrl-c>d     Rope show documentation
+" <Ctrl-c>f     Rope find occurrences
+" <Leader>b     Set, unset breakpoint (g:pymode_breakpoint enabled)
+" [[            Jump on previous class or function (normal, visual, operator modes)
+" ]]            Jump on next class or function (normal, visual, operator modes)
+" [M            Jump on previous class or method (normal, visual, operator modes)
+" ]M            Jump on next class or method (normal, visual, operator modes)
+let g:pymode_rope = 1
+
+" Documentation
+let g:pymode_doc = 1
+let g:pymode_doc_key = 'K'
+
+"Linting
+let g:pymode_lint = 1
+let g:pymode_lint_checker = "pyflakes,pep8"
+" Auto check on save
+let g:pymode_lint_write = 1
+let g:pymode_options_max_line_length = 120
+" Support virtualenv
+let g:pymode_virtualenv = 1
+
+" Enable breakpoints plugin
+let g:pymode_breakpoint = 1
+let g:pymode_breakpoint_key = '<leader>b'
+
+" syntax highlighting
+let g:pymode_syntax = 1
+let g:pymode_syntax_all = 1
+let g:pymode_syntax_indent_errors = g:pymode_syntax_all
+let g:pymode_syntax_space_errors = g:pymode_syntax_all
+
+" Don't autofold code
+let g:pymode_folding = 0
+
+
 if has('persistent_undo')
     set undofile
     set undodir=~/.vim/undodir
@@ -43,6 +102,7 @@ endif
 syntax enable
 
 filetype plugin indent on
+syntax on
 
 " bash-like filename completion
 set wildmode=longest,list,full
